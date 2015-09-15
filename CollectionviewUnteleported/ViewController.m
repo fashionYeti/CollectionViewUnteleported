@@ -19,6 +19,9 @@
 @property (strong, nonatomic) NSMutableArray *pathArray;
 @property (strong, nonatomic) NSMutableArray *supplementaryViewLabels;
 @property (weak, nonatomic) IBOutlet FXBlurView *blurView;
+@property (assign, nonatomic) CGRect movedRectStartPosition;
+@property (strong, nonatomic) CollectionViewCell *movedCell;
+@property (strong, nonatomic) UIView *toolbar;
 
 @end
 
@@ -29,18 +32,18 @@
     
     self.pathArray = [self fillPathArray];
     self.supplementaryViewLabels = [self fillSupplementaryViewArray];
+    [self createToolbar];
     
     // just adding same elements, to perform 5x10 collectionView
     [self.pathArray addObjectsFromArray:self.pathArray];
     
-    CollectionViewCustomLayout *myLayout = [[CollectionViewCustomLayout alloc] init];
-    
-    self.collectionView.collectionViewLayout = myLayout;
-    [myLayout setSectionInset:UIEdgeInsetsMake(20, 10, 20, 10)];
-    [myLayout setMinimumLineSpacing:35];
-    
     [self.collectionView registerClass:[SupplementaryView class] forSupplementaryViewOfKind:@"supplementaryViewKind" withReuseIdentifier:@"cellLabel"];
     
+    CollectionViewCustomLayout *myLayout = [[CollectionViewCustomLayout alloc] init];
+    self.collectionView.collectionViewLayout = myLayout;
+    
+    [myLayout setSectionInset:UIEdgeInsetsMake(20, 10, 20, 10)];
+    [myLayout setMinimumLineSpacing:35];
     [myLayout invalidateLayout];
 }
 
@@ -83,22 +86,37 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
-    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-    CGRect cellRect = cell.frame;
+    CollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
     
-    CGRect finishRect = cellRect;
-    finishRect.origin.x = 15;
-    [collectionView bringSubviewToFront:cell];
-    
-    [UIView animateWithDuration:1.0 animations:^{
-        cell.frame = finishRect;
-    }];
-    
-    self.blurView.blurEnabled = YES;
-    
-    [collectionView.superview bringSubviewToFront:self.blurView];
-    
-    
+    if (!self.movedCell) {
+        
+        self.movedCell = cell;
+        CGRect cellRect = cell.frame;
+        self.movedRectStartPosition = cellRect;
+        
+        CGRect finishRect = cellRect;
+        
+        if (cellRect.size.width < 100) {
+            finishRect.origin.x = 50;
+        } else {
+            finishRect.origin.x = 15;
+        }
+        
+        [collectionView bringSubviewToFront:cell];
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            cell.frame = finishRect;
+        }];
+
+    } else {
+        cell = self.movedCell;
+        CGRect currentRect = cell.frame;
+        [UIView animateWithDuration:0.5 animations:^{
+            cell.frame = self.movedRectStartPosition;
+        }];
+        
+        self.movedCell = nil;
+    }
 }
 
 #pragma mark - UICollectionView layout
@@ -141,6 +159,14 @@
         }
     }
     return supplementaryView;
+}
+
+#pragma mark - addittional methods
+
+- (void)createToolbar {
+    CGRect screenRect = self.collectionView.superview.bounds;
+    UIView *toolbar = [[UIView alloc] initWithFrame:CGRectMake(screenRect.size.width, 0, screenRect.size.width / 2, 130)];
+    self.toolbar = toolbar;
 }
 
 @end
