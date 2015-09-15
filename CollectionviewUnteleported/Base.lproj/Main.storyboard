@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
@@ -9,10 +9,15 @@
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="ViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="paT-lf-cny">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <collectionViewLayout key="collectionViewLayout" id="bik-Qs-x12" customClass="CollectionViewCustomLayout"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Rkr-tg-3eY">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="10" minY="20" maxX="10" maxY="0.0"/>
+                        </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="CollectionViewCell" reuseIdentifier="CollectionViewCell" id="9GB-uh-QeQ" customClass="CollectionViewCell">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -28,10 +33,10 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <constraints>
-                                    <constraint firstItem="RgZ-AM-UWf" firstAttribute="top" secondItem="9GB-uh-QeQ" secondAttribute="top" id="DBM-ag-Mdq"/>
-                                    <constraint firstItem="RgZ-AM-UWf" firstAttribute="leading" secondItem="9GB-uh-QeQ" secondAttribute="leading" id="LQk-kW-Ivf"/>
-                                    <constraint firstAttribute="trailing" secondItem="RgZ-AM-UWf" secondAttribute="trailing" id="ONU-nO-cLK"/>
-                                    <constraint firstAttribute="bottom" secondItem="RgZ-AM-UWf" secondAttribute="bottom" id="swj-e6-Utb"/>
+                                    <constraint firstAttribute="trailing" secondItem="RgZ-AM-UWf" secondAttribute="trailing" id="ACK-KL-6vB"/>
+                                    <constraint firstItem="RgZ-AM-UWf" firstAttribute="leading" secondItem="9GB-uh-QeQ" secondAttribute="leading" id="CeD-Ng-f7d"/>
+                                    <constraint firstAttribute="bottom" secondItem="RgZ-AM-UWf" secondAttribute="bottom" id="RiL-AQ-IA6"/>
+                                    <constraint firstItem="RgZ-AM-UWf" firstAttribute="top" secondItem="9GB-uh-QeQ" secondAttribute="top" id="Rtp-3j-BTs"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="imageView" destination="RgZ-AM-UWf" id="gdf-BW-CfE"/>
@@ -49,7 +54,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="579" y="416"/>
+            <point key="canvasLocation" x="308.80000000000001" y="393.81333333333333"/>
         </scene>
     </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

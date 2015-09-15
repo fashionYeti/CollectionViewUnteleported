@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "CollectionViewCell.h"
+#import "CollectionViewCustomLayout.h"
+#import "SupplementaryView.h"
 
 @interface ViewController () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
@@ -29,6 +31,15 @@
     // just adding same elements, to perform 5x10 collectionView
     [self.pathArray addObjectsFromArray:self.pathArray];
     
+    CollectionViewCustomLayout *myLayout = [[CollectionViewCustomLayout alloc] init];
+    
+    self.collectionView.collectionViewLayout = myLayout;
+    [myLayout setSectionInset:UIEdgeInsetsMake(20, 10, 20, 10)];
+    [myLayout setMinimumLineSpacing:35];
+    
+    [self.collectionView registerClass:[SupplementaryView class] forSupplementaryViewOfKind:@"supplementaryViewKind" withReuseIdentifier:@"cellLabel"];
+    
+    [myLayout invalidateLayout];
 }
 
 #pragma mark - UICollectionView DataSource
@@ -42,6 +53,30 @@
     
     return cell;
 }
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    
+//    SupplementaryView *suppView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"cellLabel" forIndexPath:indexPath];
+//    
+//    UILabel *suppLabel = [[UILabel alloc] initWithFrame:suppView.frame];
+//    suppLabel.text = self.supplementaryViewLabels[indexPath.row];
+//    
+//    //[suppView addSubview:suppLabel];
+    UICollectionReusableView *suppView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"cellLabel" forIndexPath:indexPath];
+    
+    CGRect suppRect = suppView.bounds;
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:suppRect];
+    
+    [label setText:self.supplementaryViewLabels[indexPath.row]];
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleWidth;
+    label.textAlignment = 1;
+    
+    [suppView addSubview:label];
+    
+    return suppView;
+}
+
 
 #pragma mark - UICollectionView layout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
