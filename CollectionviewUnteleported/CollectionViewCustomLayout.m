@@ -31,7 +31,7 @@
 -(UICollectionViewLayoutAttributes*) layoutAttributesForSupplementaryViewOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
     //create a new layout attributes to represent this reusable view
     UICollectionViewLayoutAttributes *attrs = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:kind withIndexPath:indexPath];
-    
+    attr
     if(attrs){
         
         //get the attributes for the related cell at this index path
