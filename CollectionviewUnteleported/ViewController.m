@@ -32,7 +32,6 @@
     
     self.pathArray = [self fillPathArray];
     self.supplementaryViewLabels = [self fillSupplementaryViewArray];
-    [self createToolbar];
     
     // just adding same elements, to perform 5x10 collectionView
     [self.pathArray addObjectsFromArray:self.pathArray];
@@ -45,6 +44,10 @@
     [myLayout setSectionInset:UIEdgeInsetsMake(20, 10, 20, 10)];
     [myLayout setMinimumLineSpacing:35];
     [myLayout invalidateLayout];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self createToolbar];
 }
 
 #pragma mark - UICollectionView DataSource
@@ -88,6 +91,9 @@
     
     CollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
     
+    [collectionView bringSubviewToFront:cell];
+    [collectionView bringSubviewToFront:self.toolbar];
+    
     if (!self.movedCell) {
         
         self.movedCell = cell;
@@ -95,6 +101,7 @@
         self.movedRectStartPosition = cellRect;
         
         CGRect finishRect = cellRect;
+        CGRect toolbarRect = self.toolbar.frame;
         
         if (cellRect.size.width < 100) {
             finishRect.origin.x = 50;
@@ -102,17 +109,31 @@
             finishRect.origin.x = 15;
         }
         
-        [collectionView bringSubviewToFront:cell];
+        toolbarRect.size.height = 90;
+        toolbarRect.size.width = 500;
+        toolbarRect.origin = CGPointMake(finishRect.origin.x + finishRect.size.width + 15, -150);
         
+        self.toolbar.frame = toolbarRect;
+        self.toolbar.backgroundColor = [UIColor redColor];
+        
+        toolbarRect.origin = CGPointMake(finishRect.origin.x + finishRect.size.width + 15, CGRectGetMidY(finishRect) - finishRect.size.height / 2);
         [UIView animateWithDuration:0.5 animations:^{
             cell.frame = finishRect;
+            self.toolbar.frame = toolbarRect;
         }];
-
+    
     } else {
+        CGRect screenRect = self.collectionView.superview.frame;
+        
         cell = self.movedCell;
         CGRect currentRect = cell.frame;
+        CGRect toolbarStart = self.toolbar.frame;
+        
+        toolbarStart.origin = CGPointMake(screenRect.size.width, currentRect.origin.y);
+        
         [UIView animateWithDuration:0.5 animations:^{
             cell.frame = self.movedRectStartPosition;
+            self.toolbar.frame = toolbarStart;
         }];
         
         self.movedCell = nil;
@@ -164,9 +185,9 @@
 #pragma mark - addittional methods
 
 - (void)createToolbar {
-    CGRect screenRect = self.collectionView.superview.bounds;
-    UIView *toolbar = [[UIView alloc] initWithFrame:CGRectMake(screenRect.size.width, 0, screenRect.size.width / 2, 130)];
+    UIView *toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.toolbar = toolbar;
+    [self.collectionView addSubview:self.toolbar];
 }
 
 @end
