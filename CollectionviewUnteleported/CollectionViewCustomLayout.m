@@ -44,7 +44,7 @@
         if([kind isEqual: @"supplementaryViewKind"]) {
             //position this reusable view relative to the cells frame
             CGRect frame = cellAttrs.frame;
-            frame.origin.y += frame.size.height;
+            frame.origin.y += frame.size.height + 2;
             frame.size.height = 20;
             attrs.frame = frame;
         }

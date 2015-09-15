@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2B37C0801BA764B8002BCD52 /* CollectionViewCustomLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B37C07F1BA764B8002BCD52 /* CollectionViewCustomLayout.m */; };
 		2F8DA26F1BA8265A00484EF9 /* SupplementaryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8DA26E1BA8265A00484EF9 /* SupplementaryView.m */; };
+		2F8DA2761BA8745F00484EF9 /* FXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F8DA2751BA8745F00484EF9 /* FXBlurView.m */; };
+		2F8DA2791BA8748200484EF9 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F8DA2781BA8748200484EF9 /* Accelerate.framework */; };
 		2FDABF8E1BA6F36C0077C645 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FDABF8D1BA6F36C0077C645 /* main.m */; };
 		2FDABF911BA6F36C0077C645 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FDABF901BA6F36C0077C645 /* AppDelegate.m */; };
 		2FDABF941BA6F36C0077C645 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FDABF931BA6F36C0077C645 /* ViewController.m */; };
@@ -35,6 +37,9 @@
 		2B37C07F1BA764B8002BCD52 /* CollectionViewCustomLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionViewCustomLayout.m; sourceTree = "<group>"; };
 		2F8DA26D1BA8265A00484EF9 /* SupplementaryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupplementaryView.h; sourceTree = "<group>"; };
 		2F8DA26E1BA8265A00484EF9 /* SupplementaryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SupplementaryView.m; sourceTree = "<group>"; };
+		2F8DA2741BA8745F00484EF9 /* FXBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXBlurView.h; sourceTree = "<group>"; };
+		2F8DA2751BA8745F00484EF9 /* FXBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXBlurView.m; sourceTree = "<group>"; };
+		2F8DA2781BA8748200484EF9 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		2FDABF881BA6F36C0077C645 /* CollectionviewUnteleported.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CollectionviewUnteleported.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FDABF8C1BA6F36C0077C645 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2FDABF8D1BA6F36C0077C645 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -58,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F8DA2791BA8748200484EF9 /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,6 +113,15 @@
 			name = ViewController;
 			sourceTree = "<group>";
 		};
+		2F8DA2771BA8746700484EF9 /* Blur */ = {
+			isa = PBXGroup;
+			children = (
+				2F8DA2741BA8745F00484EF9 /* FXBlurView.h */,
+				2F8DA2751BA8745F00484EF9 /* FXBlurView.m */,
+			);
+			name = Blur;
+			sourceTree = "<group>";
+		};
 		2FDABF7F1BA6F36C0077C645 = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +149,8 @@
 				2F8DA2701BA8517600484EF9 /* CollectionViewCell */,
 				2F8DA2711BA8518300484EF9 /* CollectionViewCustomFlowLayout */,
 				2F8DA2721BA8519900484EF9 /* SupplementaryView */,
+				2F8DA2771BA8746700484EF9 /* Blur */,
+				2F8DA2781BA8748200484EF9 /* Accelerate.framework */,
 				2FDABF951BA6F36C0077C645 /* Main.storyboard */,
 				2FDABF981BA6F36C0077C645 /* Images.xcassets */,
 				2FDAC0181BA70F8E0077C645 /* images */,
@@ -272,6 +289,7 @@
 			files = (
 				2F8DA26F1BA8265A00484EF9 /* SupplementaryView.m in Sources */,
 				2FDABF941BA6F36C0077C645 /* ViewController.m in Sources */,
+				2F8DA2761BA8745F00484EF9 /* FXBlurView.m in Sources */,
 				2B37C0801BA764B8002BCD52 /* CollectionViewCustomLayout.m in Sources */,
 				2FDABF911BA6F36C0077C645 /* AppDelegate.m in Sources */,
 				2FDAC01C1BA7133A0077C645 /* CollectionViewCell.m in Sources */,

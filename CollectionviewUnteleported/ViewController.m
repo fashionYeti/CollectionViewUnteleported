@@ -10,6 +10,7 @@
 #import "CollectionViewCell.h"
 #import "CollectionViewCustomLayout.h"
 #import "SupplementaryView.h"
+#import "FXBlurView.h"
 
 @interface ViewController () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
@@ -17,6 +18,7 @@
 
 @property (strong, nonatomic) NSMutableArray *pathArray;
 @property (strong, nonatomic) NSMutableArray *supplementaryViewLabels;
+@property (weak, nonatomic) IBOutlet FXBlurView *blurView;
 
 @end
 
@@ -77,6 +79,27 @@
     return suppView;
 }
 
+#pragma mark - UICollectionView delegate
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+    CGRect cellRect = cell.frame;
+    
+    CGRect finishRect = cellRect;
+    finishRect.origin.x = 15;
+    [collectionView bringSubviewToFront:cell];
+    
+    [UIView animateWithDuration:1.0 animations:^{
+        cell.frame = finishRect;
+    }];
+    
+    self.blurView.blurEnabled = YES;
+    
+    [collectionView.superview bringSubviewToFront:self.blurView];
+    
+    
+}
 
 #pragma mark - UICollectionView layout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
