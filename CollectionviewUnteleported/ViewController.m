@@ -18,10 +18,11 @@
 
 @property (strong, nonatomic) NSMutableArray *pathArray;
 @property (strong, nonatomic) NSMutableArray *supplementaryViewLabels;
-@property (weak, nonatomic) IBOutlet FXBlurView *blurView;
 @property (assign, nonatomic) CGRect movedRectStartPosition;
 @property (strong, nonatomic) CollectionViewCell *movedCell;
 @property (strong, nonatomic) UIView *toolbar;
+@property (strong, nonatomic) FXBlurView *blurView;
+//@property (weak, nonatomic) IBOutlet UIView *toolbar;
 
 @end
 
@@ -47,7 +48,13 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self createToolbar];
+    [self prepareBlur];
+    [self prepareToolbar];
+    
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap:)];
+    [self.blurView addGestureRecognizer:singleFingerTap];
 }
 
 #pragma mark - UICollectionView DataSource
@@ -91,10 +98,9 @@
     
     CollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
     
-    [collectionView bringSubviewToFront:cell];
-    [collectionView bringSubviewToFront:self.toolbar];
-    
     if (!self.movedCell) {
+        [collectionView bringSubviewToFront:cell];
+        //self.movedCellIndex = [collectionView.subviews indexOfObject:cell];
         
         self.movedCell = cell;
         CGRect cellRect = cell.frame;
@@ -114,28 +120,31 @@
         toolbarRect.origin = CGPointMake(finishRect.origin.x + finishRect.size.width + 15, -150);
         
         self.toolbar.frame = toolbarRect;
-        self.toolbar.backgroundColor = [UIColor redColor];
         
-        toolbarRect.origin = CGPointMake(finishRect.origin.x + finishRect.size.width + 15, CGRectGetMidY(finishRect) - finishRect.size.height / 2);
+        toolbarRect.origin = CGPointMake(finishRect.origin.x + finishRect.size.width + 15, CGRectGetMidY(finishRect) - toolbarRect.size.height / 2);
+        
+        self.blurView.hidden = NO;
         [UIView animateWithDuration:0.5 animations:^{
             cell.frame = finishRect;
             self.toolbar.frame = toolbarRect;
+            self.blurView.alpha = 1;
         }];
     
     } else {
-        CGRect screenRect = self.collectionView.superview.frame;
-        
         cell = self.movedCell;
-        CGRect currentRect = cell.frame;
         CGRect toolbarStart = self.toolbar.frame;
         
-        toolbarStart.origin = CGPointMake(screenRect.size.width, currentRect.origin.y);
+        toolbarStart.origin = CGPointMake(toolbarStart.origin.x, -150);
         
         [UIView animateWithDuration:0.5 animations:^{
             cell.frame = self.movedRectStartPosition;
             self.toolbar.frame = toolbarStart;
+            self.blurView.alpha = 0;
+        } completion:^(BOOL finished) {
+             [collectionView sendSubviewToBack:cell];
+            self.blurView.hidden = YES;
         }];
-        
+       
         self.movedCell = nil;
     }
 }
@@ -145,7 +154,9 @@
     CGRect screenRect = self.view.superview.frame;
     CGSize cellSize;
     
-    if ([self.supplementaryViewLabels[indexPath.row] hasPrefix:@"B"] || [self.supplementaryViewLabels[indexPath.row] hasPrefix:@"C"] || [self.supplementaryViewLabels[indexPath.row] hasPrefix:@"E"]) {
+    if ([self.supplementaryViewLabels[indexPath.row] hasPrefix:@"B"] ||
+        [self.supplementaryViewLabels[indexPath.row] hasPrefix:@"C"] ||
+        [self.supplementaryViewLabels[indexPath.row] hasPrefix:@"E"]) {
         cellSize = CGSizeMake((screenRect.size.width - 11*10) / 10, (screenRect.size.width - 11*10) / 10);
     } else {
         cellSize = CGSizeMake((screenRect.size.width - 6*20) / 5, (screenRect.size.width - 6*20) / 5);
@@ -182,12 +193,35 @@
     return supplementaryView;
 }
 
+#pragma mark - gestureRecognizer methods
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
+    NSLog(@"LOLOLOLO");
+    
+}
+
 #pragma mark - addittional methods
 
-- (void)createToolbar {
+- (void)prepareToolbar {
     UIView *toolbar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.toolbar = toolbar;
     [self.collectionView addSubview:self.toolbar];
+    [self.collectionView bringSubviewToFront:self.toolbar];
+    self.toolbar.backgroundColor = [UIColor whiteColor];
+    self.toolbar.alpha = 0.9f;
+}
+
+- (void)prepareBlur {
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    FXBlurView *blurView = [[FXBlurView alloc] initWithFrame:screenRect];
+    blurView.blurEnabled = YES;
+    blurView.backgroundColor = [UIColor whiteColor];
+    blurView.tintColor = [UIColor clearColor];
+    blurView.alpha = 0.0f;
+    blurView.hidden = YES;
+    //[self.collectionView addSubview:blurView];
+    self.blurView = blurView;
+    [self.collectionView insertSubview:blurView atIndex:0];
+    
 }
 
 @end
