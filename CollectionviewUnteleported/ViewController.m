@@ -18,11 +18,10 @@
 
 @property (strong, nonatomic) NSMutableArray *pathArray;
 @property (strong, nonatomic) NSMutableArray *supplementaryViewLabels;
-@property (assign, nonatomic) CGRect movedRectStartPosition;
 @property (strong, nonatomic) CollectionViewCell *movedCell;
 @property (strong, nonatomic) UIView *toolbar;
 @property (strong, nonatomic) FXBlurView *blurView;
-//@property (weak, nonatomic) IBOutlet UIView *toolbar;
+@property (assign, nonatomic) CGRect movedRectStartPosition;
 
 @end
 
@@ -38,6 +37,7 @@
     [self.pathArray addObjectsFromArray:self.pathArray];
     
     [self.collectionView registerClass:[SupplementaryView class] forSupplementaryViewOfKind:@"supplementaryViewKind" withReuseIdentifier:@"cellLabel"];
+    
     
     CollectionViewCustomLayout *myLayout = [[CollectionViewCustomLayout alloc] init];
     self.collectionView.collectionViewLayout = myLayout;
@@ -71,22 +71,13 @@
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     
-//    SupplementaryView *suppView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"cellLabel" forIndexPath:indexPath];
-//    
-//    UILabel *suppLabel = [[UILabel alloc] initWithFrame:suppView.frame];
-//    suppLabel.text = self.supplementaryViewLabels[indexPath.row];
-//    
-//    //[suppView addSubview:suppLabel];
-    UICollectionReusableView *suppView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"cellLabel" forIndexPath:indexPath];
+    SupplementaryView *suppView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"cellLabel" forIndexPath:indexPath];
     
     CGRect suppRect = suppView.bounds;
-    
     UILabel *label = [[UILabel alloc] initWithFrame:suppRect];
-    
     [label setText:self.supplementaryViewLabels[indexPath.row]];
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleWidth;
     label.textAlignment = 1;
-    
     [suppView addSubview:label];
     
     return suppView;
@@ -96,20 +87,20 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
-    CollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-    
     if (!self.movedCell) {
+        CollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+        
         [collectionView bringSubviewToFront:cell];
-        //self.movedCellIndex = [collectionView.subviews indexOfObject:cell];
         
         self.movedCell = cell;
-        CGRect cellRect = cell.frame;
-        self.movedRectStartPosition = cellRect;
         
-        CGRect finishRect = cellRect;
+        self.movedRectStartPosition = cell.frame;
+        
+        //CGRect cellRect = cell.frame;
+        CGRect finishRect = cell.frame;
         CGRect toolbarRect = self.toolbar.frame;
         
-        if (cellRect.size.width < 100) {
+        if (finishRect.size.width < 100) {
             finishRect.origin.x = 50;
         } else {
             finishRect.origin.x = 15;
@@ -129,23 +120,6 @@
             self.toolbar.frame = toolbarRect;
             self.blurView.alpha = 1;
         }];
-    
-    } else {
-        cell = self.movedCell;
-        CGRect toolbarStart = self.toolbar.frame;
-        
-        toolbarStart.origin = CGPointMake(toolbarStart.origin.x, -150);
-        
-        [UIView animateWithDuration:0.5 animations:^{
-            cell.frame = self.movedRectStartPosition;
-            self.toolbar.frame = toolbarStart;
-            self.blurView.alpha = 0;
-        } completion:^(BOOL finished) {
-             [collectionView sendSubviewToBack:cell];
-            self.blurView.hidden = YES;
-        }];
-       
-        self.movedCell = nil;
     }
 }
 
@@ -195,8 +169,21 @@
 
 #pragma mark - gestureRecognizer methods
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
-    NSLog(@"LOLOLOLO");
+    CollectionViewCell *cell = self.movedCell;
+    CGRect toolbarStart = self.toolbar.frame;
     
+    toolbarStart.origin = CGPointMake(toolbarStart.origin.x, -150);
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        cell.frame = self.movedRectStartPosition;
+        self.toolbar.frame = toolbarStart;
+        self.blurView.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self.collectionView sendSubviewToBack:cell];
+        self.blurView.hidden = YES;
+    }];
+    
+    self.movedCell = nil;
 }
 
 #pragma mark - addittional methods
@@ -206,8 +193,8 @@
     self.toolbar = toolbar;
     [self.collectionView addSubview:self.toolbar];
     [self.collectionView bringSubviewToFront:self.toolbar];
-    self.toolbar.backgroundColor = [UIColor whiteColor];
-    self.toolbar.alpha = 0.9f;
+    self.toolbar.backgroundColor = [UIColor redColor];
+    self.toolbar.alpha = 0.5f;
 }
 
 - (void)prepareBlur {
@@ -221,7 +208,6 @@
     //[self.collectionView addSubview:blurView];
     self.blurView = blurView;
     [self.collectionView insertSubview:blurView atIndex:0];
-    
 }
 
 @end
