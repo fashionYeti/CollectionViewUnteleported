@@ -23,8 +23,6 @@
     //go through each cell attribute
     for (UICollectionViewLayoutAttributes *attributes in [super layoutAttributesForElementsInRect:rect])
     {
-        //add a title and a detail supp view for each cell attribute to your copy of all attributes
-//        [allAttributes addObject:[self layoutAttributesForSupplementaryViewOfKind:SomeCellDetailsKind atIndexPath:[attributes indexPath]]];
         [allAttributes addObject:[self layoutAttributesForSupplementaryViewOfKind:@"supplementaryViewKind" atIndexPath:[attributes indexPath]]];
     }
     
@@ -32,7 +30,7 @@
     return allAttributes;
 }
 
--(UICollectionViewLayoutAttributes*) layoutAttributesForSupplementaryViewOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
+- (UICollectionViewLayoutAttributes*)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
     //create a new layout attributes to represent this reusable view
     UICollectionViewLayoutAttributes *attrs = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:kind withIndexPath:indexPath];
     
@@ -48,14 +46,6 @@
             frame.size.height = 20;
             attrs.frame = frame;
         }
-        
-//        if([kind  isEqual: @"supplementaryViewKind"]){
-//            //position this reusable view relative to the cells frame
-//            CGRect frame = cellAttrs.frame;
-//            frame.origin.y -= 20; //+= frame.size.height; //( - frame.size.height;
-//            frame.size.height = 20;
-//            attrs.frame = frame;
-//        }
     }
     
     return attrs;
